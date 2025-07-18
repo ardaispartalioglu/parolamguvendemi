@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parolam Güvende mi?</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        /* --- RENK VE TEMA DEĞİŞKENLERİ --- */
+        :root {
+            --color-background: #f0f2f5;
+            --color-container: #ffffff;
+            --color-text-primary: #1c1e21;
+            --color-text-secondary: #606770;
+            --color-border: #dddfe2;
+            --color-primary-button: #0866ff;
+            --color-secondary-button: #e4e6eb;
+            --color-success: #31a24c;
+            --color-weak: #f02849;
+            --color-medium: #f7b928;
+            --color-strong: #a2c151;
+            --color-very-strong: #31a24c;
+            --color-checking: #606770;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- KOYU MOD --- */
+        [data-theme="dark"] {
+            --color-background: #18191a;
+            --color-container: #242526;
+            --color-text-primary: #e4e6eb;
+            --color-text-secondary: #b0b3b8;
+            --color-border: #3a3b3c;
+            --color-secondary-button: #3a3b3c;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+        }
+        
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-background);
+            color: var(--color-text-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 1rem;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            background-color: var(--color-container);
+            padding: 2rem 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            width: 100%;
+            max-width: 480px;
+            text-align: center;
+            position: relative;
+            transition: background-color 0.3s ease;
+        }
+        
+        /* --- TEMA DEĞİŞTİRME BUTONU --- */
+        #theme-toggle {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--color-text-secondary);
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: color 0.3s, background-color 0.3s;
+        }
+        #theme-toggle:hover {
+            background-color: var(--color-secondary-button);
+        }
+
+        h1 { font-size: 1.75rem; margin-bottom: 0.5rem; }
+        .subtitle { font-size: 1rem; color: var(--color-text-secondary); margin-bottom: 2rem; }
+        
+        .password-wrapper { position: relative; margin-bottom: 1rem; }
+        #password-input {
+            width: 100%;
+            padding: 1rem;
+            padding-right: 3rem;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: var(--color-background);
+            color: var(--color-text-primary);
+            transition: border-color 0.3s;
+        }
+        #password-input:focus { outline: none; border-color: var(--color-primary-button); }
+        #toggle-password {
+            position: absolute;
+            top: 50%; right: 1rem;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--color-text-secondary);
+        }
+        
+        .strength-meter { height: 8px; width: 100%; background-color: var(--color-border); border-radius: 4px; overflow: hidden; margin-bottom: 0.5rem; }
+        #strength-bar { height: 100%; width: 0; background-color: var(--color-weak); transition: width 0.4s ease, background-color 0.4s ease; }
+        #feedback-text { text-align: left; font-weight: 500; height: 20px; transition: color 0.3s ease; }
+        
+        #criteria-list { list-style: none; padding: 0; margin: 1.5rem 0; text-align: left; }
+        #criteria-list li { color: var(--color-text-secondary); margin-bottom: 0.75rem; transition: color 0.3s ease, font-weight 0.3s ease; display: flex; align-items: center; }
+        #criteria-list li i { margin-right: 0.75rem; width: 20px; transition: transform 0.3s ease, color 0.3s ease; }
+        
+        #criteria-list li.met { color: var(--color-success); font-weight: 500; }
+        #criteria-list li.met i { color: var(--color-success); transform: scale(1.1); }
+        #criteria-list li.pwned { color: var(--color-weak); font-weight: 700; }
+        #criteria-list li.pwned i { color: var(--color-weak); }
+        #criteria-list li.checking i { animation: spin-icon 1s linear infinite; }
+
+        @keyframes spin-icon { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        
+        .button-group { display: flex; gap: 1rem; }
+        .btn { flex-grow: 1; padding: 0.9rem 1rem; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+        .btn:active { transform: scale(0.98); }
+        #generate-btn-modal-trigger { background-color: var(--color-primary-button); color: white; }
+        #copy-btn { background-color: var(--color-secondary-button); color: var(--color-text-primary); }
+        .copy-feedback { display: none; margin-top: 1rem; color: var(--color-success); font-weight: 500; }
+
+        /* --- GELİŞMİŞ PAROLA OLUŞTURUCU MODAL --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 1000;
+        }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal-content {
+            background: var(--color-container);
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+        .modal-overlay.active .modal-content { transform: scale(1); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        .modal-header h2 { margin: 0; font-size: 1.5rem; }
+        .modal-close { font-size: 1.5rem; cursor: pointer; background: none; border: none; color: var(--color-text-secondary); }
+        .generator-options { text-align: left; }
+        .option-group { margin-bottom: 1.5rem; }
+        .option-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+        .slider-container { display: flex; align-items: center; gap: 1rem; }
+        #length-slider { width: 100%; }
+        #length-value { font-weight: 700; }
+        .checkbox-group label, .radio-group label { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; cursor: pointer; }
+        .modal-footer { margin-top: 2rem; }
+        #generate-btn-final { width: 100%; background-color: var(--color-primary-button); color: white; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <button id="theme-toggle"><i class="fa-solid fa-moon"></i></button>
+        
+        <h1>Parolam Güvende mi?</h1>
+        <p class="subtitle">Parolanızın ne kadar güvenli olduğunu ve daha önce sızdırılıp sızdırılmadığını anında öğrenin.</p>
+
+        <div class="password-wrapper">
+            <input type="password" id="password-input" placeholder="Parolanızı buraya yazın...">
+            <i class="fa-solid fa-eye" id="toggle-password"></i>
+        </div>
+
+        <div class="strength-meter">
+            <div id="strength-bar"></div>
+        </div>
+        <p id="feedback-text"></p>
+
+        <ul id="criteria-list">
+            <li id="length"><i class="fa-regular fa-circle"></i> En az 12 karakter</li>
+            <li id="lowercase"><i class="fa-regular fa-circle"></i> Bir küçük harf (a-z)</li>
+            <li id="uppercase"><i class="fa-regular fa-circle"></i> Bir büyük harf (A-Z)</li>
+            <li id="number"><i class="fa-regular fa-circle"></i> Bir rakam (0-9)</li>
+            <li id="symbol"><i class="fa-regular fa-circle"></i> Bir sembol (!@#$%)</li>
+            <li id="pwned"><i class="fa-regular fa-circle-question"></i> Veri sızıntılarında bulunmadı</li>
+        </ul>
+        
+        <div class="button-group">
+            <button id="generate-btn-modal-trigger" class="btn">Güvenli Parola Oluştur</button>
+            <button id="copy-btn" class="btn">Panoya Kopyala</button>
+        </div>
+        <p id="copy-feedback" class="copy-feedback">Parola kopyalandı!</p>
+    </div>
+
+    <!-- GELİŞMİŞ PAROLA OLUŞTURUCU MODAL HTML'İ -->
+    <div class="modal-overlay" id="generator-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Gelişmiş Oluşturucu</h2>
+                <button class="modal-close" id="modal-close-btn">&times;</button>
+            </div>
+            <div class="generator-options">
+                <div class="option-group">
+                    <label for="length-slider">Parola Uzunluğu</label>
+                    <div class="slider-container">
+                        <input type="range" id="length-slider" min="8" max="32" value="16">
+                        <span id="length-value">16</span>
+                    </div>
+                </div>
+                <div class="option-group checkbox-group">
+                    <label><input type="checkbox" id="include-numbers" checked> Sayıları Dahil Et (0-9)</label>
+                    <label><input type="checkbox" id="include-symbols" checked> Sembolleri Dahil Et (!@#$)</label>
+                </div>
+                <div class="option-group radio-group">
+                    <label><input type="radio" name="type" value="random" checked> Tamamen Rastgele</label>
+                    <label><input type="radio" name="type" value="memorable"> Akılda Kalıcı (Parola)</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="generate-btn-final" class="btn">Oluştur ve Kullan</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DOM ELEMENTLERİNİ SEÇME ---
+        const passwordInput = document.getElementById('password-input');
+        const togglePassword = document.getElementById('toggle-password');
+        const strengthBar = document.getElementById('strength-bar');
+        const feedbackText = document.getElementById('feedback-text');
+        const criteria = {
+            length: { el: document.getElementById('length'), met: false },
+            lowercase: { el: document.getElementById('lowercase'), met: false },
+            uppercase: { el: document.getElementById('uppercase'), met: false },
+            number: { el: document.getElementById('number'), met: false },
+            symbol: { el: document.getElementById('symbol'), met: false },
+            pwned: { el: document.getElementById('pwned'), met: true }
+        };
+        const copyBtn = document.getElementById('copy-btn');
+        const copyFeedback = document.getElementById('copy-feedback');
+        
+        // YENİ EKLENEN ELEMENTLER
+        const themeToggle = document.getElementById('theme-toggle');
+        const generateBtnModalTrigger = document.getElementById('generate-btn-modal-trigger');
+        const generatorModal = document.getElementById('generator-modal');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+        const lengthSlider = document.getElementById('length-slider');
+        const lengthValue = document.getElementById('length-value');
+        const includeNumbers = document.getElementById('include-numbers');
+        const includeSymbols = document.getElementById('include-symbols');
+        const generateBtnFinal = document.getElementById('generate-btn-final');
+
+        // --- OLAY DİNLEYİCİLERİ ---
+        passwordInput.addEventListener('input', () => {
+            const password = passwordInput.value;
+            checkPasswordStrength(password);
+            debouncedPwnedCheck(password);
+        });
+
+        togglePassword.addEventListener('click', () => {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            togglePassword.classList.toggle('fa-eye');
+            togglePassword.classList.toggle('fa-eye-slash');
+        });
+        
+        copyBtn.addEventListener('click', () => {
+            const password = passwordInput.value;
+            if (password) {
+                const textArea = document.createElement('textarea');
+                textArea.value = password;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    copyFeedback.style.display = 'block';
+                    setTimeout(() => { copyFeedback.style.display = 'none'; }, 2000);
+                } catch (err) { console.error('Kopyalama başarısız oldu', err); }
+                document.body.removeChild(textArea);
+            }
+        });
+
+        // --- YENİ EKLENEN OLAY DİNLEYİCİLERİ ---
+
+        // Tema değiştirici
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeToggle.innerHTML = newTheme === 'dark' ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+        });
+
+        // Sayfa yüklendiğinde kayıtlı temayı uygula
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            themeToggle.innerHTML = savedTheme === 'dark' ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+        });
+
+        // Gelişmiş oluşturucu modalını aç/kapat
+        generateBtnModalTrigger.addEventListener('click', () => generatorModal.classList.add('active'));
+        modalCloseBtn.addEventListener('click', () => generatorModal.classList.remove('active'));
+        generatorModal.addEventListener('click', (e) => {
+            if (e.target === generatorModal) {
+                generatorModal.classList.remove('active');
+            }
+        });
+
+        // Slider değerini güncelle
+        lengthSlider.addEventListener('input', () => lengthValue.textContent = lengthSlider.value);
+
+        // Son oluşturma butonu
+        generateBtnFinal.addEventListener('click', () => {
+            const newPassword = generatePassword();
+            passwordInput.value = newPassword;
+            passwordInput.dispatchEvent(new Event('input'));
+            generatorModal.classList.remove('active');
+        });
+
+        // --- FONKSİYONLAR ---
+
+        function checkPasswordStrength(password) { /* ... Öncekiyle aynı ... */ }
+        function updateUI(score) { /* ... Öncekiyle aynı ... */ }
+        function resetUI() { /* ... Öncekiyle aynı ... */ }
+        function debounce(func, delay) { /* ... Öncekiyle aynı ... */ }
+        async function sha1(text) { /* ... Öncekiyle aynı ... */ }
+        async function checkPwnedPassword(password) { /* ... Öncekiyle aynı ... */ }
+        const debouncedPwnedCheck = debounce(checkPwnedPassword, 500);
+
+        // --- YENİ: GÜNCELLENMİŞ PAROLA OLUŞTURMA FONKSİYONU ---
+        function generatePassword() {
+            const length = parseInt(lengthSlider.value, 10);
+            const useNumbers = includeNumbers.checked;
+            const useSymbols = includeSymbols.checked;
+            const type = document.querySelector('input[name="type"]:checked').value;
+
+            if (type === 'memorable') {
+                return generateMemorablePassword(length, useNumbers, useSymbols);
+            } else {
+                return generateRandomPassword(length, useNumbers, useSymbols);
+            }
+        }
+        
+        function generateRandomPassword(length, useNumbers, useSymbols) {
+            let charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            if (useNumbers) charset += '0123456789';
+            if (useSymbols) charset += '!@#$%^&*()_+-=[]{}|;:,.<>?';
+            
+            let password = '';
+            for (let i = 0; i < length; i++) {
+                password += getRandomChar(charset);
+            }
+            return password;
+        }
+
+        function generateMemorablePassword(length, useNumbers, useSymbols) {
+            const words = ["Kedi", "Masa", "Bulut", "Yildiz", "Kalem", "Araba", "Sokak", "Deniz", "Gunes", "Kitap", "Hizli", "Yesil", "Buyuk", "Gizli", "Guclu"];
+            let password = '';
+            // Yaklaşık olarak istenen uzunluğa ulaşana kadar kelime ekle
+            while(password.length < length - 6) {
+                password += getRandomChar(words);
+            }
+            if (useNumbers) password += Math.floor(10 + Math.random() * 90); // 2 haneli sayı
+            if (useSymbols) password += getRandomChar('!@#$%*');
+            return password;
+        }
+
+        function getRandomChar(characters) {
+            const randomIndex = window.crypto.getRandomValues(new Uint32Array(1))[0] % characters.length;
+            return characters[randomIndex];
+        }
+        
+        function shuffleString(str) {
+            const arr = str.split('');
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr.join('');
+        }
+        
+        // Önceki fonksiyonların içini kopyala-yapıştır ile dolduruyoruz
+        function checkPasswordStrength(password){let score=0;if(password.length===0){resetUI();return;}
+        const checks={length:password.length>=12,lowercase:/[a-z]/.test(password),uppercase:/[A-Z]/.test(password),number:/[0-9]/.test(password),symbol:/[^A-Za-z0-9]/.test(password)};for(let key in checks){const li=criteria[key].el;const icon=li.querySelector('i');criteria[key].met=checks[key];if(checks[key]){score++;li.classList.add('met');icon.className='fa-solid fa-circle-check';}else{li.classList.remove('met');icon.className='fa-regular fa-circle';}}
+        if(!criteria.pwned.met){score=1;}
+        updateUI(score);}
+        function updateUI(score){let text='';let color='';let width=(score/5)*100;if(!criteria.pwned.met){text='BU PAROLA SIZDIRILMIŞ!';color='var(--color-weak)';width=100;}else{switch(score){case 0:text='';break;case 1:case 2:text='Zayıf';color='var(--color-weak)';break;case 3:text='Orta';color='var(--color-medium)';break;case 4:text='Güçlü';color='var(--color-strong)';break;case 5:text='Çok Güçlü';color='var(--color-very-strong)';break;}}
+        feedbackText.textContent=text;feedbackText.style.color=color;strengthBar.style.width=`${width}%`;strengthBar.style.backgroundColor=color;}
+        function resetUI(){for(const key in criteria){const li=criteria[key].el;const icon=li.querySelector('i');li.className='';if(key==='pwned'){icon.className='fa-regular fa-circle-question';li.childNodes[1].textContent=' Veri sızıntılarında bulunmadı';}else{icon.className='fa-regular fa-circle';}}
+        strengthBar.style.width='0%';feedbackText.textContent='';}
+        function debounce(func,delay){let timeout;return function(...args){clearTimeout(timeout);timeout=setTimeout(()=>func.apply(this,args),delay);};}
+        async function sha1(text){const buffer=new TextEncoder().encode(text);const hashBuffer=await crypto.subtle.digest('SHA-1',buffer);const hashArray=Array.from(new Uint8Array(hashBuffer));return hashArray.map(b=>b.toString(16).padStart(2,'0')).join('').toUpperCase();}
+        async function checkPwnedPassword(password){if(password.length===0){resetUI();return;}
+        const pwnedEl=criteria.pwned.el;const pwnedIcon=pwnedEl.querySelector('i');pwnedEl.className='checking';pwnedIcon.className='fa-solid fa-spinner';pwnedEl.childNodes[1].textContent=' Sızıntı kontrol ediliyor...';try{const hash=await sha1(password);const prefix=hash.substring(0,5);const suffix=hash.substring(5);const response=await fetch(`https://api.pwnedpasswords.com/range/${prefix}`);if(!response.ok)throw new Error('API request failed');const data=await response.text();const isPwned=data.split('\n').some(line=>line.startsWith(suffix));pwnedEl.className=isPwned?'pwned':'met';pwnedIcon.className=isPwned?'fa-solid fa-triangle-exclamation':'fa-solid fa-shield-halved';pwnedEl.childNodes[1].textContent=isPwned?' Bu parola sızıntılarda bulundu!':' Veri sızıntılarında bulunmadı';criteria.pwned.met=!isPwned;}catch(error){console.error('Pwned check failed:',error);pwnedEl.className='';pwnedIcon.className='fa-solid fa-circle-xmark';pwnedEl.childNodes[1].textContent=' Sızıntı kontrolü başarısız oldu.';criteria.pwned.met=false;}
+        checkPasswordStrength(passwordInput.value);}
+
+    </script>
+</body>
+</html>
