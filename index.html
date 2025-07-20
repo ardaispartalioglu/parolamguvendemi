@@ -5,42 +5,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parolam Güvende mi?</title>
     
+    <!-- Favicon - Anahtar İkonu -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path fill='%23667eea' d='M336 352c97.2 0 176-78.8 176-176S433.2 0 336 0S160 78.8 160 176c0 18.7 2.9 36.8 8.3 53.7L7 391c-4.5 4.5-7 10.6-7 17v80c0 13.3 10.7 24 24 24h80c13.3 0 24-10.7 24-24V448h40c13.3 0 24-10.7 24-24V384h40c6.4 0 12.5-2.5 17-7l33.3-33.3c16.9 5.4 35 8.3 53.7 8.3zM376 96a40 40 0 1 1 0 80 40 40 0 1 1 0-80z'/></svg>" type="image/svg+xml">
+    <link rel="shortcut icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path fill='%23667eea' d='M336 352c97.2 0 176-78.8 176-176S433.2 0 336 0S160 78.8 160 176c0 18.7 2.9 36.8 8.3 53.7L7 391c-4.5 4.5-7 10.6-7 17v80c0 13.3 10.7 24 24 24h80c13.3 0 24-10.7 24-24V448h40c13.3 0 24-10.7 24-24V384h40c6.4 0 12.5-2.5 17-7l33.3-33.3c16.9 5.4 35 8.3 53.7 8.3zM376 96a40 40 0 1 1 0 80 40 40 0 1 1 0-80z'/></svg>" type="image/svg+xml">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- zxcvbn Kütüphanesi - Gelişmiş Parola Analizi -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
 
     <style>
-        /* --- RENK VE TEMA DEĞİŞKENLERİ --- */
+        /* --- MINIMAL THEME VARIABLES --- */
         :root {
-            --color-background: #f0f2f5;
+            --color-background: #ffffff;
             --color-container: #ffffff;
-            --color-text-primary: #1c1e21;
-            --color-text-secondary: #606770;
-            --color-border: #dddfe2;
-            --color-primary-button: #0866ff;
-            --color-secondary-button: #e4e6eb;
-            --color-success: #31a24c;
-            --color-weak: #f02849;
-            --color-medium: #f7b928;
-            --color-strong: #a2c151;
-            --color-very-strong: #31a24c;
-            --color-checking: #606770;
-            --shadow-color: rgba(0, 0, 0, 0.1);
+            --color-text-primary: #2d3748;
+            --color-text-secondary: #718096;
+            --color-border: #e2e8f0;
+            --color-primary: #667eea;
+            --color-primary-light: #f7fafc;
+            --color-success: #48bb78;
+            --color-weak: #f56565;
+            --color-medium: #ed8936;
+            --color-strong: #38b2ac;
+            --color-very-strong: #48bb78;
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
 
-        /* --- KOYU MOD --- */
+        /* --- DARK MODE --- */
         [data-theme="dark"] {
-            --color-background: #18191a;
-            --color-container: #242526;
-            --color-text-primary: #e4e6eb;
-            --color-text-secondary: #b0b3b8;
-            --color-border: #3a3b3c;
-            --color-secondary-button: #3a3b3c;
-            --shadow-color: rgba(0, 0, 0, 0.3);
+            --color-background: #1a202c;
+            --color-container: #2d3748;
+            --color-text-primary: #f7fafc;
+            --color-text-secondary: #a0aec0;
+            --color-border: #4a5568;
+            --color-primary-light: #2d3748;
         }
         
-        *, *::before, *::after { box-sizing: border-box; }
+        /* --- CLEAN RESET AND BASE STYLES --- */
+        *, *::before, *::after { 
+            box-sizing: border-box; 
+        }
 
         body {
             font-family: 'Inter', sans-serif;
@@ -53,159 +63,681 @@
             margin: 0;
             padding: 1rem;
             transition: background-color 0.3s ease, color 0.3s ease;
+            line-height: 1.6;
         }
 
+        /* --- MAIN CONTAINER --- */
         .container {
             background-color: var(--color-container);
-            padding: 2rem 2.5rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px var(--shadow-color);
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
             width: 100%;
-            max-width: 480px;
+            max-width: 500px;
             text-align: center;
             position: relative;
             transition: background-color 0.3s ease;
+            border: 1px solid var(--color-border);
+            overflow: visible;
         }
         
-        /* --- TEMA DEĞİŞTİRME BUTONU --- */
-        #theme-toggle {
-            position: absolute;
+        /* --- THEME TOGGLE BUTTON --- */
+        .theme-toggle {
+            position: fixed;
             top: 1rem;
             right: 1rem;
-            background: none;
-            border: none;
+            background: var(--color-primary-light);
+            border: 1px solid var(--color-border);
             color: var(--color-text-secondary);
-            font-size: 1.25rem;
+            font-size: 1.1rem;
             cursor: pointer;
             padding: 0.5rem;
             border-radius: 50%;
-            transition: color 0.3s, background-color 0.3s;
+            transition: all 0.2s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            box-shadow: var(--shadow-md);
         }
-        #theme-toggle:hover {
-            background-color: var(--color-secondary-button);
+        .theme-toggle:hover {
+            color: var(--color-text-primary);
+            background-color: var(--color-border);
+            transform: scale(1.05);
         }
 
-        h1 { font-size: 1.75rem; margin-bottom: 0.5rem; }
-        .subtitle { font-size: 1rem; color: var(--color-text-secondary); margin-bottom: 2rem; }
-        
-        .password-wrapper { position: relative; margin-bottom: 1rem; }
-        #password-input {
-            width: 100%;
+        /* --- TYPOGRAPHY --- */
+        h1 { 
+            font-size: 1.875rem; 
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--color-text-primary);
+            margin-top: 0;
+        }
+        .subtitle { 
+            font-size: 0.95rem; 
+            color: var(--color-text-secondary); 
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        /* --- TAB NAVIGATION --- */
+        .tab-nav {
+            display: flex;
+            border-bottom: 1px solid var(--color-border);
+            margin: -2.5rem -2.5rem 2rem -2.5rem;
+            background-color: var(--color-primary-light);
+            border-radius: 16px 16px 0 0;
+        }
+        .tab-link {
+            flex: 1;
             padding: 1rem;
-            padding-right: 3rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+        }
+        .tab-link:hover {
+            color: var(--color-text-primary);
+            background-color: rgba(102, 126, 234, 0.05);
+        }
+        .tab-link.active {
+            color: var(--color-primary);
+            border-bottom-color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* --- TAB CONTENT --- */
+        .tab-content { 
+            display: none; 
+        }
+        .tab-content.active { 
+            display: block; 
+            animation: fadeIn 0.3s ease; 
+        }
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(10px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+
+        /* --- FORM INPUTS --- */
+        .password-wrapper, .email-input-wrapper { 
+            position: relative; 
+            margin-bottom: 1.25rem; 
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 0.875rem 2.5rem 0.875rem 0.875rem;
             border: 1px solid var(--color-border);
             border-radius: 8px;
-            font-size: 1rem;
             background-color: var(--color-background);
             color: var(--color-text-primary);
-            transition: border-color 0.3s;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s ease;
         }
-        #password-input:focus { outline: none; border-color: var(--color-primary-button); }
-        #toggle-password {
-            position: absolute;
-            top: 50%; right: 1rem;
-            transform: translateY(-50%);
-            cursor: pointer;
+        
+        .input-field:focus { 
+            outline: none; 
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .input-field::placeholder {
             color: var(--color-text-secondary);
         }
         
-        .strength-meter { height: 8px; width: 100%; background-color: var(--color-border); border-radius: 4px; overflow: hidden; margin-bottom: 0.5rem; }
-        #strength-bar { height: 100%; width: 0; background-color: var(--color-weak); transition: width 0.4s ease, background-color 0.4s ease; }
-        #feedback-text { text-align: left; font-weight: 500; height: 20px; transition: color 0.3s ease; }
+        .toggle-password {
+            position: absolute;
+            top: 50%; 
+            right: 0.75rem;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--color-text-secondary);
+            font-size: 1rem;
+            transition: color 0.2s ease;
+        }
         
-        #criteria-list { list-style: none; padding: 0; margin: 1.5rem 0; text-align: left; }
-        #criteria-list li { color: var(--color-text-secondary); margin-bottom: 0.75rem; transition: color 0.3s ease, font-weight 0.3s ease; display: flex; align-items: center; }
-        #criteria-list li i { margin-right: 0.75rem; width: 20px; transition: transform 0.3s ease, color 0.3s ease; }
+        .toggle-password:hover {
+            color: var(--color-text-primary);
+        }
         
-        #criteria-list li.met { color: var(--color-success); font-weight: 500; }
-        #criteria-list li.met i { color: var(--color-success); transform: scale(1.1); }
-        #criteria-list li.pwned { color: var(--color-weak); font-weight: 700; }
-        #criteria-list li.pwned i { color: var(--color-weak); }
-        #criteria-list li.checking i { animation: spin-icon 1s linear infinite; }
+        /* --- STRENGTH METER --- */
+        .strength-meter { 
+            height: 6px; 
+            width: 100%; 
+            background-color: var(--color-border); 
+            border-radius: 3px; 
+            overflow: hidden; 
+            margin-bottom: 0.75rem; 
+        }
+        
+        .strength-bar { 
+            height: 100%; 
+            width: 0; 
+            background-color: var(--color-weak); 
+            transition: width 0.3s ease, background-color 0.3s ease; 
+        }
+        
+        .feedback-text { 
+            text-align: left; 
+            font-weight: 500; 
+            font-size: 0.875rem;
+            margin-bottom: 1.5rem;
+            min-height: 1.25rem;
+            transition: color 0.2s ease; 
+        }
+        
+        /* --- PASSWORD ANALYSIS CARD --- */
+        .password-analysis {
+            margin: 1.5rem 0;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .password-analysis.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .analysis-card {
+            background: var(--color-primary-light);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: left;
+        }
+        
+        .analysis-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            color: var(--color-primary);
+        }
+        
+        .analysis-header i {
+            font-size: 1.1rem;
+        }
+        
+        .analysis-header h3 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        
+        .crack-time {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            background: var(--color-background);
+            border-radius: 8px;
+            border: 1px solid var(--color-border);
+        }
+        
+        .time-label {
+            color: var(--color-text-secondary);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .time-value {
+            color: var(--color-text-primary);
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        
+        .attack-scenario {
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            background: rgba(245, 101, 101, 0.1);
+            border-left: 3px solid var(--color-weak);
+            border-radius: 0 6px 6px 0;
+            font-size: 0.875rem;
+            color: var(--color-text-primary);
+            line-height: 1.4;
+        }
+        
+        .attack-scenario.safe {
+            background: rgba(72, 187, 120, 0.1);
+            border-left-color: var(--color-success);
+        }
+        
+        .suggestions {
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+            line-height: 1.4;
+        }
+        
+        .suggestions strong {
+            color: var(--color-text-primary);
+        }
+        
+        /* --- CRITERIA LIST --- */
+        .criteria-list { 
+            list-style: none; 
+            padding: 0; 
+            margin: 1.5rem 0; 
+            text-align: left; 
+        }
+        
+        .criteria-list li { 
+            color: var(--color-text-secondary); 
+            margin-bottom: 0.75rem; 
+            transition: all 0.2s ease; 
+            display: flex; 
+            align-items: center;
+            font-size: 0.875rem;
+        }
+        
+        .criteria-list li i { 
+            margin-right: 0.75rem; 
+            width: 16px; 
+            transition: all 0.2s ease; 
+            font-size: 0.875rem;
+        }
+        
+        .criteria-list li.met { 
+            color: var(--color-success); 
+            font-weight: 500; 
+        }
+        
+        .criteria-list li.met i { 
+            color: var(--color-success); 
+        }
+        
+        .criteria-list li.pwned { 
+            color: var(--color-weak); 
+            font-weight: 600; 
+        }
+        
+        .criteria-list li.pwned i { 
+            color: var(--color-weak); 
+        }
+        
+        .criteria-list li.checking i { 
+            animation: spin-icon 1s linear infinite; 
+        }
 
-        @keyframes spin-icon { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes spin-icon { 
+            from { transform: rotate(0deg); } 
+            to { transform: rotate(360deg); } 
+        }
         
-        .button-group { display: flex; gap: 1rem; }
-        .btn { flex-grow: 1; padding: 0.9rem 1rem; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
-        .btn:active { transform: scale(0.98); }
-        #generate-btn-modal-trigger { background-color: var(--color-primary-button); color: white; }
-        #copy-btn { background-color: var(--color-secondary-button); color: var(--color-text-primary); }
-        .copy-feedback { display: none; margin-top: 1rem; color: var(--color-success); font-weight: 500; }
+        /* --- BUTTONS --- */
+        .button-group { 
+            display: flex; 
+            gap: 0.75rem; 
+            margin-top: 1.5rem;
+        }
+        
+        .btn { 
+            flex: 1; 
+            padding: 0.75rem 1rem; 
+            border: none; 
+            border-radius: 8px;
+            font-size: 0.875rem; 
+            font-weight: 500; 
+            cursor: pointer; 
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .btn:hover { 
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn:active { 
+            transform: translateY(0);
+        }
+        
+        .btn-primary { 
+            background-color: var(--color-primary); 
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #5a67d8;
+        }
+        
+        .btn-secondary { 
+            background-color: var(--color-primary-light); 
+            color: var(--color-text-primary);
+            border: 1px solid var(--color-border);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--color-border);
+        }
 
-        /* --- GELİŞMİŞ PAROLA OLUŞTURUCU MODAL --- */
+        /* --- EMAIL SECTION --- */
+        .email-results { 
+            margin-top: 1.5rem; 
+            text-align: left; 
+        }
+        
+        .email-results .redirect-message {
+            color: var(--color-text-primary); 
+            text-align: center; 
+            padding: 1.5rem;
+            background-color: var(--color-primary-light); 
+            border: 1px solid var(--color-primary);
+            border-radius: 8px;
+            font-size: 0.875rem;
+        }
+        
+        .email-results .error-message { 
+            color: var(--color-weak); 
+            font-weight: 500; 
+            text-align: center;
+            padding: 1rem;
+            background-color: rgba(245, 101, 101, 0.1);
+            border-radius: 8px;
+            font-size: 0.875rem;
+        }
+
+        .copy-feedback { 
+            display: none; 
+            margin-top: 1rem; 
+            color: var(--color-success); 
+            font-weight: 500; 
+            text-align: center;
+            padding: 0.75rem;
+            background-color: rgba(72, 187, 120, 0.1);
+            border-radius: 8px;
+            font-size: 0.875rem;
+        }
+        /* --- MODAL --- */
         .modal-overlay {
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
+            top: 0; 
+            left: 0;
+            width: 100%; 
+            height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
             display: flex;
             justify-content: center;
             align-items: center;
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
+            transition: all 0.2s ease;
             z-index: 1000;
         }
-        .modal-overlay.active { opacity: 1; visibility: visible; }
+        
+        .modal-overlay.active { 
+            opacity: 1; 
+            visibility: visible; 
+        }
+        
         .modal-content {
             background: var(--color-container);
             padding: 2rem;
-            border-radius: 12px;
+            border-radius: 16px;
             width: 90%;
-            max-width: 400px;
-            transform: scale(0.9);
-            transition: transform 0.3s ease;
+            max-width: 420px;
+            transform: scale(0.95);
+            transition: transform 0.2s ease;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--color-border);
         }
-        .modal-overlay.active .modal-content { transform: scale(1); }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-        .modal-header h2 { margin: 0; font-size: 1.5rem; }
-        .modal-close { font-size: 1.5rem; cursor: pointer; background: none; border: none; color: var(--color-text-secondary); }
-        .generator-options { text-align: left; }
-        .option-group { margin-bottom: 1.5rem; }
-        .option-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
-        .slider-container { display: flex; align-items: center; gap: 1rem; }
-        #length-slider { width: 100%; }
-        #length-value { font-weight: 700; }
-        .checkbox-group label, .radio-group label { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; cursor: pointer; }
-        .modal-footer { margin-top: 2rem; }
-        #generate-btn-final { width: 100%; background-color: var(--color-primary-button); color: white; }
+        
+        .modal-overlay.active .modal-content { 
+            transform: scale(1); 
+        }
+        
+        .modal-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 1.5rem; 
+        }
+        
+        .modal-header h2 { 
+            margin: 0; 
+            font-size: 1.5rem; 
+            font-weight: 600;
+        }
+        
+        .modal-close { 
+            font-size: 1.5rem; 
+            cursor: pointer; 
+            background: none; 
+            border: none; 
+            color: var(--color-text-secondary);
+            transition: color 0.2s ease;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+        }
+        
+        .modal-close:hover {
+            color: var(--color-text-primary);
+            background-color: var(--color-border);
+        }
+        
+        .generator-options { 
+            text-align: left; 
+        }
+        
+        .option-group { 
+            margin-bottom: 1.5rem; 
+        }
+        
+        .option-group label { 
+            display: block; 
+            margin-bottom: 0.5rem; 
+            font-weight: 500; 
+            font-size: 0.9rem;
+        }
+        
+        .slider-container { 
+            display: flex; 
+            align-items: center; 
+            gap: 0.75rem; 
+        }
+        
+        .length-slider { 
+            width: 100%;
+            height: 4px;
+            background: var(--color-border);
+            outline: none;
+            border-radius: 2px;
+            appearance: none;
+        }
+        
+        .length-slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            background: var(--color-primary);
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        
+        .length-slider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: var(--color-primary);
+            cursor: pointer;
+            border-radius: 50%;
+            border: none;
+        }
+        
+        .length-value { 
+            font-weight: 600; 
+            font-size: 0.9rem;
+            color: var(--color-primary);
+            min-width: 24px;
+        }
+        
+        .checkbox-group label, 
+        .radio-group label { 
+            display: flex; 
+            align-items: center; 
+            gap: 0.5rem; 
+            margin-bottom: 0.5rem; 
+            cursor: pointer;
+            font-weight: 400;
+            font-size: 0.875rem;
+        }
+        
+        .checkbox-group input[type="checkbox"],
+        .radio-group input[type="radio"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--color-primary);
+        }
+        
+        .modal-footer { 
+            margin-top: 1.5rem; 
+        }
+
+        /* --- RESPONSIVE DESIGN --- */
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem;
+                margin: 0.5rem;
+            }
+            
+            .theme-toggle {
+                top: 0.75rem;
+                right: 0.75rem;
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .modal-content {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+            
+            .tab-nav {
+                margin: -2rem -2rem 1.5rem -2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            .theme-toggle {
+                top: 0.5rem;
+                right: 0.5rem;
+                width: 32px;
+                height: 32px;
+                font-size: 0.9rem;
+            }
+            
+            .modal-content {
+                padding: 1.25rem;
+            }
+            
+            .tab-nav {
+                margin: -1.5rem -1.5rem 1.5rem -1.5rem;
+            }
+        }
     </style>
 </head>
 <body>
-
     <div class="container">
-        <button id="theme-toggle"><i class="fa-solid fa-moon"></i></button>
+        <button class="theme-toggle" id="theme-toggle">
+            <i class="fa-solid fa-moon"></i>
+        </button>
         
-        <h1>Parolam Güvende mi?</h1>
-        <p class="subtitle">Parolanızın ne kadar güvenli olduğunu ve daha önce sızdırılıp sızdırılmadığını anında öğrenin.</p>
-
-        <div class="password-wrapper">
-            <input type="password" id="password-input" placeholder="Parolanızı buraya yazın...">
-            <i class="fa-solid fa-eye" id="toggle-password"></i>
+        <div class="tab-nav">
+            <button class="tab-link active" data-tab="password-checker-tab">Parola Kontrolü</button>
+            <button class="tab-link" data-tab="email-checker-tab">E-posta Sızıntı Kontrolü</button>
         </div>
 
-        <div class="strength-meter">
-            <div id="strength-bar"></div>
+        <!-- Parola Kontrolü Sekmesi -->
+        <div id="password-checker-tab" class="tab-content active">
+            <h1>Parolam Güvende mi?</h1>
+            <p class="subtitle">Parolanızın ne kadar güvenli olduğunu ve daha önce sızdırılıp sızdırılmadığını anında öğrenin.</p>
+    
+            <div class="password-wrapper">
+                <input type="password" class="input-field" id="password-input" placeholder="Parolanızı buraya yazın...">
+                <i class="fa-solid fa-eye toggle-password" id="toggle-password"></i>
+            </div>
+    
+            <div class="strength-meter">
+                <div class="strength-bar" id="strength-bar"></div>
+            </div>
+            <p class="feedback-text" id="feedback-text"></p>
+            
+            <!-- Gelişmiş Parola Analizi Sonuçları -->
+            <div class="password-analysis" id="password-analysis" style="display: none;">
+                <div class="analysis-card">
+                    <div class="analysis-header">
+                        <i class="fa-solid fa-brain"></i>
+                        <h3>Detaylı Analiz</h3>
+                    </div>
+                    <div class="crack-time">
+                        <span class="time-label">Kırılma Süresi:</span>
+                        <span class="time-value" id="crack-time"></span>
+                    </div>
+                    <div class="attack-scenario" id="attack-scenario"></div>
+                    <div class="suggestions" id="suggestions"></div>
+                </div>
+            </div>
+    
+            <ul class="criteria-list" id="criteria-list">
+                <li id="length"><i class="fa-regular fa-circle"></i> En az 12 karakter</li>
+                <li id="lowercase"><i class="fa-regular fa-circle"></i> Bir küçük harf (a-z)</li>
+                <li id="uppercase"><i class="fa-regular fa-circle"></i> Bir büyük harf (A-Z)</li>
+                <li id="number"><i class="fa-regular fa-circle"></i> Bir rakam (0-9)</li>
+                <li id="symbol"><i class="fa-regular fa-circle"></i> Bir sembol (!@#$%)</li>
+                <li id="pwned"><i class="fa-regular fa-circle-question"></i> Veri sızıntılarında bulunmadı</li>
+            </ul>
+            
+            <div class="button-group">
+                <button id="generate-btn-modal-trigger" class="btn btn-primary">Güvenli Parola Oluştur</button>
+                <button id="copy-btn" class="btn btn-secondary">Panoya Kopyala</button>
+            </div>
+            <p id="copy-feedback" class="copy-feedback">Parola kopyalandı!</p>
         </div>
-        <p id="feedback-text"></p>
 
-        <ul id="criteria-list">
-            <li id="length"><i class="fa-regular fa-circle"></i> En az 12 karakter</li>
-            <li id="lowercase"><i class="fa-regular fa-circle"></i> Bir küçük harf (a-z)</li>
-            <li id="uppercase"><i class="fa-regular fa-circle"></i> Bir büyük harf (A-Z)</li>
-            <li id="number"><i class="fa-regular fa-circle"></i> Bir rakam (0-9)</li>
-            <li id="symbol"><i class="fa-regular fa-circle"></i> Bir sembol (!@#$%)</li>
-            <li id="pwned"><i class="fa-regular fa-circle-question"></i> Veri sızıntılarında bulunmadı</li>
-        </ul>
-        
-        <div class="button-group">
-            <button id="generate-btn-modal-trigger" class="btn">Güvenli Parola Oluştur</button>
-            <button id="copy-btn" class="btn">Panoya Kopyala</button>
+        <!-- E-posta Sızıntı Kontrolü Sekmesi -->
+        <div id="email-checker-tab" class="tab-content">
+            <h1>E-posta Sızıntı Kontrolü</h1>
+            <p class="subtitle">E-postanızın herhangi bir veri sızıntısında yer alıp almadığını kontrol edin.</p>
+            
+            <div class="email-input-wrapper">
+                <input type="email" class="input-field" id="email-input" placeholder="E-posta adresinizi yazın...">
+            </div>
+            <button id="check-email-btn" class="btn btn-primary" style="width: 100%;">Kontrol Et</button>
+            
+            <div id="email-results" class="email-results">
+                <!-- Sonuçlar buraya dinamik olarak eklenecek -->
+            </div>
         </div>
-        <p id="copy-feedback" class="copy-feedback">Parola kopyalandı!</p>
     </div>
 
-    <!-- GELİŞMİŞ PAROLA OLUŞTURUCU MODAL HTML'İ -->
+    <!-- GELİŞMİŞ PAROLA OLUŞTURUCU MODAL -->
     <div class="modal-overlay" id="generator-modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -216,8 +748,8 @@
                 <div class="option-group">
                     <label for="length-slider">Parola Uzunluğu</label>
                     <div class="slider-container">
-                        <input type="range" id="length-slider" min="8" max="32" value="16">
-                        <span id="length-value">16</span>
+                        <input type="range" class="length-slider" id="length-slider" min="8" max="32" value="16">
+                        <span class="length-value" id="length-value">16</span>
                     </div>
                 </div>
                 <div class="option-group checkbox-group">
@@ -226,11 +758,11 @@
                 </div>
                 <div class="option-group radio-group">
                     <label><input type="radio" name="type" value="random" checked> Tamamen Rastgele</label>
-                    <label><input type="radio" name="type" value="memorable"> Akılda Kalıcı (Parola)</label>
+                    <label><input type="radio" name="type" value="memorable"> Akılda Kalıcı</label>
                 </div>
             </div>
             <div class="modal-footer">
-                <button id="generate-btn-final" class="btn">Oluştur ve Kullan</button>
+                <button id="generate-btn-final" class="btn btn-primary" style="width: 100%;">Oluştur ve Kullan</button>
             </div>
         </div>
     </div>
@@ -252,6 +784,12 @@
         const copyBtn = document.getElementById('copy-btn');
         const copyFeedback = document.getElementById('copy-feedback');
         
+        // zxcvbn ANALİZ ELEMENTLERİ
+        const passwordAnalysis = document.getElementById('password-analysis');
+        const crackTimeElement = document.getElementById('crack-time');
+        const attackScenarioElement = document.getElementById('attack-scenario');
+        const suggestionsElement = document.getElementById('suggestions');
+        
         // YENİ EKLENEN ELEMENTLER
         const themeToggle = document.getElementById('theme-toggle');
         const generateBtnModalTrigger = document.getElementById('generate-btn-modal-trigger');
@@ -262,6 +800,26 @@
         const includeNumbers = document.getElementById('include-numbers');
         const includeSymbols = document.getElementById('include-symbols');
         const generateBtnFinal = document.getElementById('generate-btn-final');
+        
+        // YENİ: SEKME VE E-POSTA KONTROL ELEMENTLERİ
+        const tabLinks = document.querySelectorAll('.tab-link');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const emailInput = document.getElementById('email-input');
+        const checkEmailBtn = document.getElementById('check-email-btn');
+        const emailResults = document.getElementById('email-results');
+
+        // --- SAYFA YÜKLENDİĞİNDE BAŞLANGIÇ AYARLARI ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light'; // Varsayılan olarak açık tema
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
+        });
+
+        function updateThemeIcon(theme) {
+            themeToggle.innerHTML = theme === 'dark' ? 
+                '<i class="fa-solid fa-sun"></i>' : 
+                '<i class="fa-solid fa-moon"></i>';
+        }
 
         // --- OLAY DİNLEYİCİLERİ ---
         passwordInput.addEventListener('input', () => {
@@ -280,20 +838,26 @@
         copyBtn.addEventListener('click', () => {
             const password = passwordInput.value;
             if (password) {
-                const textArea = document.createElement('textarea');
-                textArea.value = password;
-                document.body.appendChild(textArea);
-                textArea.select();
-                try {
-                    document.execCommand('copy');
+                navigator.clipboard.writeText(password).then(() => {
                     copyFeedback.style.display = 'block';
-                    setTimeout(() => { copyFeedback.style.display = 'none'; }, 2000);
-                } catch (err) { console.error('Kopyalama başarısız oldu', err); }
-                document.body.removeChild(textArea);
+                    setTimeout(() => { copyFeedback.style.display = 'none'; }, 3000);
+                }).catch(() => {
+                    // Fallback for older browsers
+                    const textArea = document.createElement('textarea');
+                    textArea.value = password;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    try {
+                        document.execCommand('copy');
+                        copyFeedback.style.display = 'block';
+                        setTimeout(() => { copyFeedback.style.display = 'none'; }, 3000);
+                    } catch (err) { 
+                        console.error('Kopyalama başarısız oldu', err); 
+                    }
+                    document.body.removeChild(textArea);
+                });
             }
         });
-
-        // --- YENİ EKLENEN OLAY DİNLEYİCİLERİ ---
 
         // Tema değiştirici
         themeToggle.addEventListener('click', () => {
@@ -301,14 +865,7 @@
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
             document.documentElement.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
-            themeToggle.innerHTML = newTheme === 'dark' ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
-        });
-
-        // Sayfa yüklendiğinde kayıtlı temayı uygula
-        document.addEventListener('DOMContentLoaded', () => {
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-            themeToggle.innerHTML = savedTheme === 'dark' ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+            updateThemeIcon(newTheme);
         });
 
         // Gelişmiş oluşturucu modalını aç/kapat
@@ -316,6 +873,13 @@
         modalCloseBtn.addEventListener('click', () => generatorModal.classList.remove('active'));
         generatorModal.addEventListener('click', (e) => {
             if (e.target === generatorModal) {
+                generatorModal.classList.remove('active');
+            }
+        });
+
+        // ESC tuşu ile modal kapatma
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && generatorModal.classList.contains('active')) {
                 generatorModal.classList.remove('active');
             }
         });
@@ -331,17 +895,340 @@
             generatorModal.classList.remove('active');
         });
 
-        // --- FONKSİYONLAR ---
+        // Sekme değiştirme
+        tabLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                const tabId = link.getAttribute('data-tab');
 
-        function checkPasswordStrength(password) { /* ... Öncekiyle aynı ... */ }
-        function updateUI(score) { /* ... Öncekiyle aynı ... */ }
-        function resetUI() { /* ... Öncekiyle aynı ... */ }
-        function debounce(func, delay) { /* ... Öncekiyle aynı ... */ }
-        async function sha1(text) { /* ... Öncekiyle aynı ... */ }
-        async function checkPwnedPassword(password) { /* ... Öncekiyle aynı ... */ }
+                tabLinks.forEach(item => item.classList.remove('active'));
+                tabContents.forEach(item => item.classList.remove('active'));
+
+                link.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // E-posta kontrol butonu
+        checkEmailBtn.addEventListener('click', () => {
+            const email = emailInput.value.trim();
+            if (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                checkBreachedEmail(email);
+            } else {
+                emailResults.innerHTML = '<div class="error-message">Lütfen geçerli bir e-posta adresi girin.</div>';
+            }
+        });
+
+        // Enter tuşu ile e-posta kontrolü
+        emailInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                checkEmailBtn.click();
+            }
+        });
+
+        // --- FONKSİYONLAR ---
+        function checkPasswordStrength(password) {
+            let score = 0;
+            
+            if (password.length === 0) {
+                resetUI();
+                return;
+            }
+
+            const checks = {
+                length: password.length >= 12,
+                lowercase: /[a-z]/.test(password),
+                uppercase: /[A-Z]/.test(password),
+                number: /[0-9]/.test(password),
+                symbol: /[^A-Za-z0-9]/.test(password)
+            };
+
+            for (let key in checks) {
+                const li = criteria[key].el;
+                const icon = li.querySelector('i');
+                criteria[key].met = checks[key];
+                
+                if (checks[key]) {
+                    score++;
+                    li.classList.add('met');
+                    icon.className = 'fa-solid fa-circle-check';
+                } else {
+                    li.classList.remove('met');
+                    icon.className = 'fa-regular fa-circle';
+                }
+            }
+
+            if (!criteria.pwned.met) {
+                score = 1;
+            }
+
+            updateUI(score);
+            
+            // zxcvbn Gelişmiş Analizi
+            if (typeof zxcvbn !== 'undefined' && password.length > 0) {
+                performAdvancedAnalysis(password);
+            }
+        }
+
+        function updateUI(score) {
+            let text = '';
+            let color = '';
+            let width = (score / 5) * 100;
+
+            if (!criteria.pwned.met) {
+                text = 'BU PAROLA SIZDIRILMIŞ!';
+                color = 'var(--color-weak)';
+                width = 100;
+            } else {
+                switch (score) {
+                    case 0:
+                        text = '';
+                        break;
+                    case 1:
+                    case 2:
+                        text = 'Zayıf';
+                        color = 'var(--color-weak)';
+                        break;
+                    case 3:
+                        text = 'Orta';
+                        color = 'var(--color-medium)';
+                        break;
+                    case 4:
+                        text = 'Güçlü';
+                        color = 'var(--color-strong)';
+                        break;
+                    case 5:
+                        text = 'Çok Güçlü';
+                        color = 'var(--color-very-strong)';
+                        break;
+                }
+            }
+
+            feedbackText.textContent = text;
+            feedbackText.style.color = color;
+            strengthBar.style.width = `${width}%`;
+            strengthBar.style.backgroundColor = color;
+        }
+
+        function resetUI() {
+            for (const key in criteria) {
+                const li = criteria[key].el;
+                const icon = li.querySelector('i');
+                li.className = '';
+                
+                if (key === 'pwned') {
+                    icon.className = 'fa-regular fa-circle-question';
+                    li.childNodes[1].textContent = ' Veri sızıntılarında bulunmadı';
+                } else {
+                    icon.className = 'fa-regular fa-circle';
+                }
+            }
+            
+            strengthBar.style.width = '0%';
+            feedbackText.textContent = '';
+            
+            // Gelişmiş analizi gizle
+            passwordAnalysis.style.display = 'none';
+            passwordAnalysis.classList.remove('show');
+        }
+
+        function debounce(func, delay) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), delay);
+            };
+        }
+
+        async function sha1(text) {
+            const buffer = new TextEncoder().encode(text);
+            const hashBuffer = await crypto.subtle.digest('SHA-1', buffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').toUpperCase();
+        }
+
+        async function checkPwnedPassword(password) {
+            if (password.length === 0) {
+                resetUI();
+                return;
+            }
+
+            const pwnedEl = criteria.pwned.el;
+            const pwnedIcon = pwnedEl.querySelector('i');
+            
+            pwnedEl.className = 'checking';
+            pwnedIcon.className = 'fa-solid fa-spinner';
+            pwnedEl.childNodes[1].textContent = ' Sızıntı kontrol ediliyor...';
+
+            try {
+                const hash = await sha1(password);
+                const prefix = hash.substring(0, 5);
+                const suffix = hash.substring(5);
+                
+                const response = await fetch(`https://api.pwnedpasswords.com/range/${prefix}`);
+                if (!response.ok) throw new Error('API request failed');
+                
+                const data = await response.text();
+                const isPwned = data.split('\n').some(line => line.startsWith(suffix));
+                
+                pwnedEl.className = isPwned ? 'pwned' : 'met';
+                pwnedIcon.className = isPwned ? 'fa-solid fa-triangle-exclamation' : 'fa-solid fa-shield-halved';
+                pwnedEl.childNodes[1].textContent = isPwned ? ' Bu parola sızıntılarda bulundu!' : ' Veri sızıntılarında bulunmadı';
+                criteria.pwned.met = !isPwned;
+                
+            } catch (error) {
+                console.error('Pwned check failed:', error);
+                pwnedEl.className = '';
+                pwnedIcon.className = 'fa-solid fa-circle-xmark';
+                pwnedEl.childNodes[1].textContent = ' Sızıntı kontrolü başarısız oldu.';
+                criteria.pwned.met = false;
+            }
+            
+            checkPasswordStrength(passwordInput.value);
+        }
+
         const debouncedPwnedCheck = debounce(checkPwnedPassword, 500);
 
-        // --- YENİ: GÜNCELLENMİŞ PAROLA OLUŞTURMA FONKSİYONU ---
+        // --- GELİŞMİŞ PAROLA ANALİZİ (zxcvbn) ---
+        function performAdvancedAnalysis(password) {
+            const result = zxcvbn(password);
+            
+            // Kırılma süresini hesapla ve göster
+            const crackTime = getCrackTimeText(result.crack_times_seconds.offline_slow_hashing_1e4_per_second);
+            crackTimeElement.textContent = crackTime;
+            
+            // Saldırı senaryosunu oluştur
+            const attackScenario = generateAttackScenario(result);
+            attackScenarioElement.innerHTML = attackScenario.text;
+            attackScenarioElement.className = `attack-scenario ${attackScenario.safe ? 'safe' : ''}`;
+            
+            // Önerileri göster
+            const suggestions = generateSuggestions(result);
+            suggestionsElement.innerHTML = suggestions;
+            
+            // Analiz kartını göster
+            passwordAnalysis.style.display = 'block';
+            setTimeout(() => {
+                passwordAnalysis.classList.add('show');
+            }, 10);
+        }
+        
+        function getCrackTimeText(seconds) {
+            if (seconds < 1) return "Anında";
+            if (seconds < 60) return `${Math.round(seconds)} saniye`;
+            if (seconds < 3600) return `${Math.round(seconds / 60)} dakika`;
+            if (seconds < 86400) return `${Math.round(seconds / 3600)} saat`;
+            if (seconds < 2592000) return `${Math.round(seconds / 86400)} gün`;
+            if (seconds < 31536000) return `${Math.round(seconds / 2592000)} ay`;
+            if (seconds < 3153600000) return `${Math.round(seconds / 31536000)} yıl`;
+            return `${Math.round(seconds / 31536000)} yıl (çok uzun)`;
+        }
+        
+        function generateAttackScenario(result) {
+            const patterns = result.sequence || [];
+            let scenario = "";
+            let safe = result.score >= 3;
+            
+            if (result.score <= 2) {
+                if (patterns.some(p => p.pattern === 'dictionary')) {
+                    scenario = "⚠️ <strong>Sözlük Saldırısı:</strong> Bu parola yaygın kelimeler içeriyor. Saldırganlar sözlük tabanlı araçlarla kolayca kırabilir.";
+                } else if (patterns.some(p => p.pattern === 'sequence')) {
+                    scenario = "⚠️ <strong>Dizi Saldırısı:</strong> Bu parola ardışık karakterler içeriyor (123, abc gibi). Bu tür desenler kolayca tahmin edilebilir.";
+                } else if (patterns.some(p => p.pattern === 'repeat')) {
+                    scenario = "⚠️ <strong>Tekrar Saldırısı:</strong> Bu parola tekrar eden karakterler içeriyor. Bu durum parolanın güvenliğini önemli ölçüde azaltır.";
+                } else if (patterns.some(p => p.pattern === 'date')) {
+                    scenario = "⚠️ <strong>Tarih Tahmini:</strong> Bu parola tarih formatı içeriyor. Doğum tarihleri ve önemli tarihler kolayca tahmin edilebilir.";
+                } else if (patterns.some(p => p.pattern === 'spatial')) {
+                    scenario = "⚠️ <strong>Klavye Deseni:</strong> Bu parola klavye üzerinde yakın tuşları içeriyor (qwerty, asdf gibi). Bu desenler bilinen saldırı yöntemleridir.";
+                } else {
+                    scenario = "⚠️ <strong>Brute Force Saldırısı:</strong> Bu parola kısa veya basit olduğu için modern bilgisayarlarla sistematik deneme yanılma yöntemiyle kırılabilir.";
+                }
+            } else {
+                scenario = "✅ <strong>Güvenli:</strong> Bu parola mevcut saldırı yöntemlerine karşı dayanıklı görünüyor. Ancak yine de düzenli olarak değiştirmeyi unutmayın.";
+            }
+            
+            return { text: scenario, safe: safe };
+        }
+        
+        function generateSuggestions(result) {
+            const feedback = result.feedback;
+            let suggestions = "";
+            
+            if (feedback.warning) {
+                suggestions += `<strong>Uyarı:</strong> ${translateWarning(feedback.warning)}<br><br>`;
+            }
+            
+            if (feedback.suggestions && feedback.suggestions.length > 0) {
+                suggestions += "<strong>Öneriler:</strong><br>";
+                feedback.suggestions.forEach(suggestion => {
+                    suggestions += `• ${translateSuggestion(suggestion)}<br>`;
+                });
+            } else if (result.score >= 3) {
+                suggestions += "<strong>Tebrikler!</strong> Parolanız güçlü görünüyor. Düzenli olarak değiştirmeyi unutmayın.";
+            }
+            
+            return suggestions;
+        }
+        
+        function translateWarning(warning) {
+            const warnings = {
+                "This is a top-10 common password": "Bu en yaygın 10 parola arasında yer alıyor",
+                "This is a top-100 common password": "Bu en yaygın 100 parola arasında yer alıyor",
+                "This is a very common password": "Bu çok yaygın bir parola",
+                "This is similar to a commonly used password": "Bu yaygın kullanılan bir parolaya benziyor",
+                "A word by itself is easy to guess": "Tek başına bir kelime tahmin edilmesi kolay",
+                "Names and surnames by themselves are easy to guess": "İsim ve soyisimler tek başına tahmin edilmesi kolay",
+                "Common names and surnames are easy to guess": "Yaygın isim ve soyisimler tahmin edilmesi kolay",
+                "Straight rows of keys are easy to guess": "Klavyede düz sıralar tahmin edilmesi kolay",
+                "Short keyboard patterns are easy to guess": "Kısa klavye desenleri tahmin edilmesi kolay",
+                "Repeats like \"aaa\" are easy to guess": "\"aaa\" gibi tekrarlar tahmin edilmesi kolay",
+                "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "\"abcabcabc\" gibi tekrarlar \"abc\"'den sadece biraz daha zor",
+                "Sequences like abc or 6543 are easy to guess": "abc veya 6543 gibi diziler tahmin edilmesi kolay",
+                "Recent years are easy to guess": "Yakın yıllar tahmin edilmesi kolay",
+                "Dates are often easy to guess": "Tarihler genellikle tahmin edilmesi kolay"
+            };
+            return warnings[warning] || warning;
+        }
+        
+        function translateSuggestion(suggestion) {
+            const suggestions = {
+                "Use a longer keyboard pattern with more turns": "Daha fazla dönüşe sahip uzun klavye deseni kullanın",
+                "Avoid repeated words and characters": "Tekrar eden kelime ve karakterlerden kaçının",
+                "Avoid sequences": "Dizilerden kaçının",
+                "Avoid recent years": "Yakın yıllardan kaçının",
+                "Avoid years that are associated with you": "Sizinle ilişkili yıllardan kaçının",
+                "Avoid dates and years that are associated with you": "Sizinle ilişkili tarih ve yıllardan kaçının",
+                "Add another word or two. Uncommon words are better.": "Bir veya iki kelime daha ekleyin. Yaygın olmayan kelimeler daha iyidir.",
+                "Capitalization doesn't help very much": "Büyük harf kullanımı çok yardımcı olmaz",
+                "All-uppercase is almost as easy to guess as all-lowercase": "Tamamı büyük harf, tamamı küçük harf kadar tahmin edilmesi kolay",
+                "Reversed words aren't much harder to guess": "Ters çevrilmiş kelimeler tahmin edilmesi çok zor değil",
+                "Predictable substitutions like '@' instead of 'a' don't help very much": "'a' yerine '@' gibi öngörülebilir değişiklikler çok yardımcı olmaz"
+            };
+            return suggestions[suggestion] || suggestion;
+        }
+
+        // --- E-POSTA SIZINTI KONTROL FONKSİYONU ---
+        function checkBreachedEmail(email) {
+            const checkUrl = `https://haveibeenpwned.com/account/${encodeURIComponent(email)}`;
+            
+            // URL'yi yeni bir sekmede aç
+            window.open(checkUrl, '_blank');
+
+            // Kullanıcıya arayüzde geri bildirim göster
+            emailResults.innerHTML = `
+                <div class="redirect-message">
+                    <strong>E-posta kontrolü için sizi Have I Been Pwned? sitesine yönlendirdik.</strong>
+                    <br><br>
+                    Lütfen sonuçları yeni açılan sekmede inceleyin. Bu sayede e-postanızın herhangi bir veri sızıntısında yer alıp almadığını öğrenebilirsiniz.
+                </div>
+            `;
+            
+            // Birkaç saniye sonra bu mesajı temizle
+            setTimeout(() => { 
+                emailResults.innerHTML = ''; 
+            }, 8000);
+        }
+
+        // --- PAROLA OLUŞTURMA FONKSİYONLARI ---
         function generatePassword() {
             const length = parseInt(lengthSlider.value, 10);
             const useNumbers = includeNumbers.checked;
@@ -370,12 +1257,15 @@
         function generateMemorablePassword(length, useNumbers, useSymbols) {
             const words = ["Kedi", "Masa", "Bulut", "Yildiz", "Kalem", "Araba", "Sokak", "Deniz", "Gunes", "Kitap", "Hizli", "Yesil", "Buyuk", "Gizli", "Guclu"];
             let password = '';
+            
             // Yaklaşık olarak istenen uzunluğa ulaşana kadar kelime ekle
             while(password.length < length - 6) {
                 password += getRandomChar(words);
             }
+            
             if (useNumbers) password += Math.floor(10 + Math.random() * 90); // 2 haneli sayı
             if (useSymbols) password += getRandomChar('!@#$%*');
+            
             return password;
         }
 
@@ -383,30 +1273,6 @@
             const randomIndex = window.crypto.getRandomValues(new Uint32Array(1))[0] % characters.length;
             return characters[randomIndex];
         }
-        
-        function shuffleString(str) {
-            const arr = str.split('');
-            for (let i = arr.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [arr[i], arr[j]] = [arr[j], arr[i]];
-            }
-            return arr.join('');
-        }
-        
-        // Önceki fonksiyonların içini kopyala-yapıştır ile dolduruyoruz
-        function checkPasswordStrength(password){let score=0;if(password.length===0){resetUI();return;}
-        const checks={length:password.length>=12,lowercase:/[a-z]/.test(password),uppercase:/[A-Z]/.test(password),number:/[0-9]/.test(password),symbol:/[^A-Za-z0-9]/.test(password)};for(let key in checks){const li=criteria[key].el;const icon=li.querySelector('i');criteria[key].met=checks[key];if(checks[key]){score++;li.classList.add('met');icon.className='fa-solid fa-circle-check';}else{li.classList.remove('met');icon.className='fa-regular fa-circle';}}
-        if(!criteria.pwned.met){score=1;}
-        updateUI(score);}
-        function updateUI(score){let text='';let color='';let width=(score/5)*100;if(!criteria.pwned.met){text='BU PAROLA SIZDIRILMIŞ!';color='var(--color-weak)';width=100;}else{switch(score){case 0:text='';break;case 1:case 2:text='Zayıf';color='var(--color-weak)';break;case 3:text='Orta';color='var(--color-medium)';break;case 4:text='Güçlü';color='var(--color-strong)';break;case 5:text='Çok Güçlü';color='var(--color-very-strong)';break;}}
-        feedbackText.textContent=text;feedbackText.style.color=color;strengthBar.style.width=`${width}%`;strengthBar.style.backgroundColor=color;}
-        function resetUI(){for(const key in criteria){const li=criteria[key].el;const icon=li.querySelector('i');li.className='';if(key==='pwned'){icon.className='fa-regular fa-circle-question';li.childNodes[1].textContent=' Veri sızıntılarında bulunmadı';}else{icon.className='fa-regular fa-circle';}}
-        strengthBar.style.width='0%';feedbackText.textContent='';}
-        function debounce(func,delay){let timeout;return function(...args){clearTimeout(timeout);timeout=setTimeout(()=>func.apply(this,args),delay);};}
-        async function sha1(text){const buffer=new TextEncoder().encode(text);const hashBuffer=await crypto.subtle.digest('SHA-1',buffer);const hashArray=Array.from(new Uint8Array(hashBuffer));return hashArray.map(b=>b.toString(16).padStart(2,'0')).join('').toUpperCase();}
-        async function checkPwnedPassword(password){if(password.length===0){resetUI();return;}
-        const pwnedEl=criteria.pwned.el;const pwnedIcon=pwnedEl.querySelector('i');pwnedEl.className='checking';pwnedIcon.className='fa-solid fa-spinner';pwnedEl.childNodes[1].textContent=' Sızıntı kontrol ediliyor...';try{const hash=await sha1(password);const prefix=hash.substring(0,5);const suffix=hash.substring(5);const response=await fetch(`https://api.pwnedpasswords.com/range/${prefix}`);if(!response.ok)throw new Error('API request failed');const data=await response.text();const isPwned=data.split('\n').some(line=>line.startsWith(suffix));pwnedEl.className=isPwned?'pwned':'met';pwnedIcon.className=isPwned?'fa-solid fa-triangle-exclamation':'fa-solid fa-shield-halved';pwnedEl.childNodes[1].textContent=isPwned?' Bu parola sızıntılarda bulundu!':' Veri sızıntılarında bulunmadı';criteria.pwned.met=!isPwned;}catch(error){console.error('Pwned check failed:',error);pwnedEl.className='';pwnedIcon.className='fa-solid fa-circle-xmark';pwnedEl.childNodes[1].textContent=' Sızıntı kontrolü başarısız oldu.';criteria.pwned.met=false;}
-        checkPasswordStrength(passwordInput.value);}
 
     </script>
 </body>
